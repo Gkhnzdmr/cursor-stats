@@ -1,9 +1,9 @@
-import * as vscode from 'vscode';
-import * as fs from 'fs';
-import * as path from 'path';
 import axios from 'axios';
+import * as fs from 'fs';
 import * as jwt from 'jsonwebtoken';
-import { TeamInfo, TeamMemberInfo, TeamUsageResponse, UserCache, CursorUsageResponse } from '../interfaces/types';
+import * as path from 'path';
+import * as vscode from 'vscode';
+import { CursorUsageResponse, TeamInfo, TeamMemberInfo, TeamUsageResponse, UserCache } from '../interfaces/types';
 import { log } from '../utils/logger';
 
 const CACHE_FILE_NAME = 'user-cache.json';
@@ -79,7 +79,7 @@ export async function checkTeamMembership(token: string, context: vscode.Extensi
         log('[Team] Cache miss or invalid, fetching fresh usage data');
         const tokenUserId = token.split('%3A%3A')[0];
         log('[Team] Making request to /api/usage endpoint');
-        const usageResponse = await axios.get<CursorUsageResponse>('https://www.cursor.com/api/usage', {
+        const usageResponse = await axios.get<CursorUsageResponse>('https://cursor.com/api/usage', {
             params: { user: tokenUserId },
             headers: {
                 Cookie: `WorkosCursorSessionToken=${token}`
@@ -94,7 +94,7 @@ export async function checkTeamMembership(token: string, context: vscode.Extensi
 
         // Fetch team membership data
         log('[Team] Making request to /api/dashboard/teams endpoint');
-        const response = await axios.post<TeamInfo>('https://www.cursor.com/api/dashboard/teams', 
+        const response = await axios.post<TeamInfo>('https://cursor.com/api/dashboard/teams', 
             {}, // empty JSON body
             {
                 headers: {
@@ -117,7 +117,7 @@ export async function checkTeamMembership(token: string, context: vscode.Extensi
         if (isTeamMember && teamId) {
             // Fetch team details to get userId
             log('[Team] Making request to /api/dashboard/team endpoint');
-            const teamResponse = await axios.post<TeamMemberInfo>('https://www.cursor.com/api/dashboard/team', 
+            const teamResponse = await axios.post<TeamMemberInfo>('https://cursor.com/api/dashboard/team', 
                 { teamId },
                 {
                     headers: {
@@ -164,7 +164,7 @@ export async function checkTeamMembership(token: string, context: vscode.Extensi
 export async function getTeamUsage(token: string, teamId: number): Promise<TeamUsageResponse> {
     try {
         log('[Team] Making request to get team usage');
-        const response = await axios.post<TeamUsageResponse>('https://www.cursor.com/api/dashboard/get-team-usage', 
+        const response = await axios.post<TeamUsageResponse>('https://cursor.com/api/dashboard/get-team-usage', 
             { teamId }, // Include teamId in request body
             {
                 headers: {

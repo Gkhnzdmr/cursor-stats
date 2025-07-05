@@ -1,14 +1,14 @@
 import axios from 'axios';
-import { CursorStats, UsageLimitResponse, ExtendedAxiosError, UsageItem, CursorUsageResponse } from '../interfaces/types';
-import { log } from '../utils/logger';
-import { checkTeamMembership, getTeamUsage, extractUserUsage } from './team';
-import { getExtensionContext } from '../extension';
-import { t } from '../utils/i18n';
 import * as fs from 'fs';
+import { getExtensionContext } from '../extension';
+import { CursorStats, CursorUsageResponse, ExtendedAxiosError, UsageItem, UsageLimitResponse } from '../interfaces/types';
+import { t } from '../utils/i18n';
+import { log } from '../utils/logger';
+import { checkTeamMembership, extractUserUsage, getTeamUsage } from './team';
 
 export async function getCurrentUsageLimit(token: string): Promise<UsageLimitResponse> {
     try {
-        const response = await axios.post('https://www.cursor.com/api/dashboard/get-hard-limit', 
+        const response = await axios.post('https://cursor.com/api/dashboard/get-hard-limit', 
             {}, // empty JSON body
             {
                 headers: {
@@ -25,7 +25,7 @@ export async function getCurrentUsageLimit(token: string): Promise<UsageLimitRes
 
 export async function setUsageLimit(token: string, hardLimit: number, noUsageBasedAllowed: boolean): Promise<void> {
     try {
-        await axios.post('https://www.cursor.com/api/dashboard/set-hard-limit', 
+        await axios.post('https://cursor.com/api/dashboard/set-hard-limit', 
             {
                 hardLimit,
                 noUsageBasedAllowed
@@ -76,7 +76,7 @@ async function fetchMonthData(token: string, month: number, year: number): Promi
                 throw devError;
             }
         } else {
-            response = await axios.post('https://www.cursor.com/api/dashboard/get-monthly-invoice', {
+            response = await axios.post('https://cursor.com/api/dashboard/get-monthly-invoice', {
                 month,
                 year,
                 includeUsageEvents: false
@@ -302,7 +302,7 @@ export async function fetchCursorStats(token: string): Promise<CursorStats> {
             };
             log('[API] Successfully extracted team member usage data');
         } else {
-            const premiumResponse = await axios.get<CursorUsageResponse>('https://www.cursor.com/api/usage', {
+            const premiumResponse = await axios.get<CursorUsageResponse>('https://cursor.com/api/usage', {
                 params: { user: userId },
                 headers: {
                     Cookie: `WorkosCursorSessionToken=${token}`
@@ -364,7 +364,7 @@ export async function fetchCursorStats(token: string): Promise<CursorStats> {
 
 export async function getStripeSessionUrl(token: string): Promise<string> {
     try {
-        const response = await axios.get('https://www.cursor.com/api/stripeSession', {
+        const response = await axios.get('https://cursor.com/api/stripeSession', {
             headers: {
                 Cookie: `WorkosCursorSessionToken=${token}`
             }

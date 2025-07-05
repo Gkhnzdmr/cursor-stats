@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
-import { log } from '../utils/logger';
-import { convertAndFormatCurrency } from '../utils/currency';
 import { UsageInfo } from '../interfaces/types';
+import { convertAndFormatCurrency } from '../utils/currency';
 import { t } from '../utils/i18n';
+import { log } from '../utils/logger';
 
 // Track which thresholds have been notified in the current session
 const notifiedPremiumThresholds = new Set<number>();
@@ -121,7 +121,7 @@ export async function checkAndNotifyUnpaidInvoice(token: string) {
                 vscode.env.openExternal(vscode.Uri.parse(stripeUrl));
             } catch (error) {
                 log('[Notifications] Failed to get Stripe URL, falling back to settings page.', true);
-                vscode.env.openExternal(vscode.Uri.parse('https://www.cursor.com/settings'));
+                vscode.env.openExternal(vscode.Uri.parse('https://cursor.com/settings'));
             }
         }
         unpaidInvoiceNotifiedThisSession = true;

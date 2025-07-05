@@ -1,15 +1,15 @@
-import * as vscode from 'vscode';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as os from 'os';
 import axios from 'axios';
+import * as fs from 'fs';
+import * as os from 'os';
+import * as path from 'path';
+import * as vscode from 'vscode';
+import { getExtensionContext } from '../extension';
 import { CursorReport, CursorUsageResponse } from '../interfaces/types';
 import { fetchCursorStats, getCurrentUsageLimit } from '../services/api';
 import { getCursorTokenFromDB } from '../services/database';
-import { log, getLogHistory } from './logger';
-import { getTeamUsage, checkTeamMembership } from '../services/team';
-import { getExtensionContext } from '../extension';
+import { checkTeamMembership, getTeamUsage } from '../services/team';
 import { t } from './i18n';
+import { getLogHistory, log } from './logger';
 
 /**
  * Generates a comprehensive report of the extension's data and API responses
@@ -93,7 +93,7 @@ export async function generateReport(): Promise<{ reportPath: string; success: b
                 }),
             
             // Get premium usage directly
-            axios.get<CursorUsageResponse>('https://www.cursor.com/api/usage', {
+            axios.get<CursorUsageResponse>('https://cursor.com/api/usage', {
                 params: { user: userId },
                 headers: { Cookie: `WorkosCursorSessionToken=${token}` }
             })
@@ -140,7 +140,7 @@ export async function generateReport(): Promise<{ reportPath: string; success: b
                 }),
 
             // Get current month invoice data
-            axios.post('https://www.cursor.com/api/dashboard/get-monthly-invoice', {
+            axios.post('https://cursor.com/api/dashboard/get-monthly-invoice', {
                 month: usageBasedCurrentMonth,
                 year: usageBasedCurrentYear,
                 includeUsageEvents: false
@@ -162,7 +162,7 @@ export async function generateReport(): Promise<{ reportPath: string; success: b
                 }),
 
             // Get last month invoice data
-            axios.post('https://www.cursor.com/api/dashboard/get-monthly-invoice', {
+            axios.post('https://cursor.com/api/dashboard/get-monthly-invoice', {
                 month: usageBasedLastMonth,
                 year: usageBasedLastYear,
                 includeUsageEvents: false

@@ -1,16 +1,16 @@
 import * as vscode from 'vscode';
-import { log } from '../utils/logger';
 import { getCurrentUsageLimit } from '../services/api';
 import { getCursorTokenFromDB } from '../services/database';
 import { convertAndFormatCurrency } from '../utils/currency';
 import { t } from '../utils/i18n';
+import { log } from '../utils/logger';
 import {
-  shouldShowProgressBars,
-  createPeriodProgressBar, 
-  createUsageProgressBar,
-  calculateDailyRemaining, 
-  getMonthNumber 
-  } from '../utils/progressBars';
+    calculateDailyRemaining,
+    createPeriodProgressBar,
+    createUsageProgressBar,
+    getMonthNumber,
+    shouldShowProgressBars
+} from '../utils/progressBars';
 
 let statusBarItem: vscode.StatusBarItem;
 
@@ -343,7 +343,7 @@ export async function createMarkdownTooltip(lines: string[], isError: boolean = 
     tooltip.appendMarkdown('<div align="center">\n\n');
     
     // First row: Account and Extension settings
-    tooltip.appendMarkdown(`🌐 [${t('statusBar.accountSettings')}](https://www.cursor.com/settings) • `);
+    tooltip.appendMarkdown(`🌐 [${t('statusBar.accountSettings')}](https://cursor.com/settings) • `);
     tooltip.appendMarkdown(`🌍 [${t('statusBar.currency')}](command:cursor-stats.selectCurrency) • `);
     tooltip.appendMarkdown(`⚙️ [${t('statusBar.extensionSettings')}](command:workbench.action.openSettings?%22@ext%3ADwtexe.cursor-stats%22)\n\n`);
     
